@@ -9,4 +9,7 @@ router.get('/', function(req, res, next) {
   res.render('user/index.hbs', { title: 'Express' });
 });
 
+router.get('/signin',function(req , res , next){
+
+});
 module.exports = router;

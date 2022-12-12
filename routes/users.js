@@ -1,9 +1,30 @@
 var express = require('express');
 var router = express.Router();
+const res = require('express/lib/response.js');
+const userHelpers = require('../helpers/user-helpers.js')
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.render('user/home.hbs');
 });
+
+router.get('/signin',function(req , res , next){
+  res.render('user/signin.hbs');
+});
+
+router.get('/signup' , function(req , res , next){
+  res.render('user/signup.hbs');
+});
+
+router.post('/signup' , function(req , res){
+  console.log("Reached here")
+  console.log(req.body)
+  // userHelpers.doSignup()
+})
+
+router.post('/signin' , function(req , res){
+  console.log("Reached here too")
+  console.log(req.body)
+  // userHelpers.doSignup()
+})
 
 module.exports = router;

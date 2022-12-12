@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var db=require('./config/connection.js');
 
+
 var hbs = require('express-handlebars');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,12 +19,14 @@ app.engine('hbs',hbs.engine({extname:'hbs' , defaultLayout:'layout' , layoutsDir
 
 app.use(logger('dev'));
 app.use(express.json());
+// app.use(express.urlencoded());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/login', usersRouter);
+
+app.use('/', usersRouter);
+// app.use('/login', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
