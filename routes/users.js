@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const res = require('express/lib/response.js');
-const userHelpers = require('../helpers/user-helpers.js')
+const userHelpers = require('../helpers/user-helpers.js');
 
 router.get('/', function(req, res, next) {
   res.render('user/home.hbs');
@@ -18,7 +18,7 @@ router.get('/signup' , function(req , res , next){
 router.post('/signup' , function(req , res){
   console.log(req.body)
   userHelpers.doSignup(req.body).then((response)=>{
-    res.redirect('/');
+    res.send("Signup Success");
   })
 })
 
