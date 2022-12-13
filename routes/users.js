@@ -16,15 +16,16 @@ router.get('/signup' , function(req , res , next){
 });
 
 router.post('/signup' , function(req , res){
-  console.log("Reached here")
   console.log(req.body)
-  // userHelpers.doSignup()
+  userHelpers.doSignup(req.body).then((response)=>{
+    res.redirect('/');
+  })
 })
 
 router.post('/signin' , function(req , res){
   console.log("Reached here too")
   console.log(req.body)
-  // userHelpers.doSignup()
+  // userHelpers.doSignup(req.body)
 })
 
 module.exports = router;
