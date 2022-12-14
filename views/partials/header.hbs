@@ -4,8 +4,22 @@
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     </button>
+    {{#if response.status}}
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle float-right mr-1 mt-4" style="background-color:#674d3c;border:0" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        {{response.user.name}}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Profile</a>
+        <a class="dropdown-item" href="#">Settings</a>
+        <a class="dropdown-item" href="#">Logout</a>
+      </div>
+    </div>
+    {{else}}
     <p align="right">
       <a class="float-right mr-1 mt-4" style="font-size: .875rem" href="/signin">SIGN IN</a>
     </p>
+    {{/if}}
   </div>
 </nav>

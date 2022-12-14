@@ -4,7 +4,8 @@ const res = require('express/lib/response.js');
 const userHelpers = require('../helpers/user-helpers.js');
 
 router.get('/', function(req, res, next) {
-  res.render('user/home.hbs');
+  response={status:false}
+  res.render('user/home.hbs',{response});
 });
 
 router.get('/signin',function(req , res , next){
@@ -23,9 +24,11 @@ router.post('/signup' , function(req , res){
 })
 
 router.post('/signin' , function(req , res){
-  console.log("Reached here too")
-  console.log(req.body)
-  // userHelpers.doSignup(req.body)
+  userHelpers.doSignin(req.body).then((response)=>{
+    if(response.status)
+      console.log(response)
+      res.render('user/home.hbs',{response})
+  })
 })
 
 module.exports = router;
