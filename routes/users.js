@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/signin',function(req , res , next){
-  let userLoginErr = req.session.userLoginErr;
+  userLoginErr = req.session.userLoginErr;
   res.render('user/signin.hbs',{userLoginErr});
 });
 
@@ -25,6 +25,7 @@ router.post('/signup' , function(req , res){
 })
 
 router.post('/signin' , function(req , res){
+  req.session.userLoginErr=false
   userHelpers.doSignin(req.body).then((response)=>{
     if(response.status)
     {
@@ -37,6 +38,19 @@ router.post('/signin' , function(req , res){
       res.redirect('/signin')
     }
   })
+})
+
+router.get('/signout' , function(req , res){
+  delete req.session.user;
+  res.redirect('/')
+})
+
+router.get('/create-blog' , function(req , res){
+  res.render('user/create_blog.hbs')
+})
+
+router.post('/create_blog' , function(req , res){
+  console.log(req.body)
 })
 
 module.exports = router;

@@ -1,22 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
   <div class="container-fluid">
-    <a class="navbar-brand" style="color:black" href="/">Home</a>
-    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    </button>
     {{#if user}}
+    <div class="display:flex;">
+      <a class="navbar-brand" style="color:black" href="/">Home</a>
+      <a class="navbar-brand" style="color:black" href="/">My Blogs</a>
+      <a class="navbar-brand" style="color:black" href="/create-blog">Create Blog</a>
+    </div>
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle float-right mr-1 mt-4" style="background-color:#674d3c;border:0" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle float-right mr-1 mt-4" style="background-color:#674d3c;border:0"
+        type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{user.name}}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="#">Profile</a>
         <a class="dropdown-item" href="#">Settings</a>
-        <a class="dropdown-item" href="#">Logout</a>
+        <a class="dropdown-item" href="/signout">Logout</a>
       </div>
     </div>
     {{else}}
+    <div class="display:flex;">
+      <a class="navbar-brand" style="color:black" href="/">Home</a>
+    </div>
     <p align="right">
       <a class="float-right mr-1 mt-4" style="font-size: .875rem" href="/signin">SIGN IN</a>
     </p>
