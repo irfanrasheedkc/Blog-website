@@ -1,5 +1,6 @@
 var db = require('../config/connection')
 const collection = require('../config/collections')
+const { resolve } = require('promise')
 var objectId = require('mongodb').ObjectId
 
 module.exports = {
@@ -38,6 +39,7 @@ module.exports = {
         })
     },
     postBlog: (blogData, userId) => {
+        blogData.date = new Date().toLocaleString(undefined, { timeZone: 'Asia/Kolkata' });
         data = {
             user: objectId(userId),
             blog: [blogData]
@@ -45,21 +47,33 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let userBlog = await db.get().collection(collection.BLOG_COLLECTION).findOne({ user: objectId(userId) })
             if (userBlog) {
-                db.get().collection(collection.BLOG_COLLECTION).updateOne({ user: objectId(userId) }, { $push: { blog: blogData } }).then((err , res)=>{
+                db.get().collection(collection.BLOG_COLLECTION).updateOne({ user: objectId(userId) }, { $push: { blog: blogData } }).then((err, res) => {
                     resolve();
                 })
             }
             else {
                 db.get().collection(collection.BLOG_COLLECTION).insertOne(data).then((err, res) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                    else {
-                        console.log(res)
-                        resolve();
-                    }
+                    resolve()
                 })
             }
+        })
+    },
+    getBlogs: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let blogs = await db.get().collection(collection.BLOG_COLLECTION).aggregate([
+                {
+                    $unwind: "$blog"
+                },
+                {
+                    $group: {
+                        _id: null,
+                        newblog: { $push: "$blog" }
+                    }
+                }
+            ]).toArray((err, documents) => {
+                console.log(documents[0].newblog)
+                resolve(documents[0].newblog);
+            })
         })
     }
 }

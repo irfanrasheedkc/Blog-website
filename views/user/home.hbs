@@ -1,1 +1,28 @@
+<style>
+    .centered {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .date {
+        font-family: 'Courier New';
+        font-size: 12px;
+    }
+
+    .content {
+        font-size: 20px;
+    }
+</style>
+
+{{#if user}}
+{{#each blogs}}
+<div style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;" class="centered">
+    <h3>{{this.title}}</h3>
+    <p class="content">{{this.content}}</p>
+    <p style="display: inline-block;" class="date">{{this.date}}</p>
+    <p style="display: inline-block;" class="float-right">Irfan Rasheed</p>
+</div>
+{{/each}}
+{{else}}
 <h3 align="center">Publish And Read Blogs Here</h3>
+{{/if}}

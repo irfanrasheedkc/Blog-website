@@ -11,9 +11,15 @@ const verifyLogin = (req, res, next) => {
   }
 }
 
-router.get('/', function(req, res, next) {
+router.get('/',async function(req, res, next) {
+  blogs=[]
+  if(req.session.userLoggedIn)
+  {
+    blogs =await userHelpers.getBlogs(req.session.user._id)
+    console.log(blogs)
+  }
   let user = req.session.user;
-  res.render('user/home.hbs', {user});
+  res.render('user/home.hbs', {user , blogs});
 });
 
 router.get('/signin',function(req , res , next){
@@ -62,6 +68,7 @@ router.get('/create-blog' ,verifyLogin, function(req , res){
 router.post('/create_blog' ,verifyLogin , function async(req , res){
   console.log(req.body)
   userHelpers.postBlog(req.body , req.session.user._id).then(()=>{
+    console.log("Reached herre")
     res.redirect('/');
   })
 })
