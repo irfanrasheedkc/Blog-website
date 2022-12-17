@@ -3,6 +3,14 @@ var router = express.Router();
 const res = require('express/lib/response.js');
 const userHelpers = require('../helpers/user-helpers.js');
 
+const verifyLogin = (req, res, next) => {
+  if (req.session.userLoggedIn) {
+    next()
+  } else {
+    res.redirect('/signin')
+  }
+}
+
 router.get('/', function(req, res, next) {
   let user = req.session.user;
   res.render('user/home.hbs', {user});
@@ -18,7 +26,6 @@ router.get('/signup' , function(req , res , next){
 });
 
 router.post('/signup' , function(req , res){
-  console.log(req.body)
   userHelpers.doSignup(req.body).then((response)=>{
     res.send("Signup Success");
   })
@@ -30,6 +37,7 @@ router.post('/signin' , function(req , res){
     if(response.status)
     {
       req.session.user = response.user
+      req.session.userLoggedIn = true
       res.redirect('/')
     }
     else
@@ -42,15 +50,20 @@ router.post('/signin' , function(req , res){
 
 router.get('/signout' , function(req , res){
   delete req.session.user;
+  req.session.userLoggedIn = false
   res.redirect('/')
 })
 
-router.get('/create-blog' , function(req , res){
-  res.render('user/create_blog.hbs')
+router.get('/create-blog' ,verifyLogin, function(req , res){
+  let user = req.session.user;
+  res.render('user/create_blog.hbs' , {user})
 })
 
-router.post('/create_blog' , function(req , res){
+router.post('/create_blog' ,verifyLogin , function async(req , res){
   console.log(req.body)
+  userHelpers.postBlog(req.body , req.session.user._id).then(()=>{
+    res.redirect('/');
+  })
 })
 
 module.exports = router;
