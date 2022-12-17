@@ -58,9 +58,9 @@ module.exports = {
             }
         })
     },
-    getBlogs: (userId) => {
+    getBlogs: () => {
         return new Promise(async (resolve, reject) => {
-            let blogs = await db.get().collection(collection.BLOG_COLLECTION).aggregate([
+            db.get().collection(collection.BLOG_COLLECTION).aggregate([
                 {
                     $unwind: "$blog"
                 },
@@ -70,9 +70,9 @@ module.exports = {
                         newblog: { $push: "$blog" }
                     }
                 }
-            ]).toArray((err, documents) => {
-                console.log(documents[0].newblog)
-                resolve(documents[0].newblog);
+            ]).toArray(async (err, documents) => {
+                blogDetails = documents[0].newblog
+                resolve(blogDetails);
             })
         })
     }

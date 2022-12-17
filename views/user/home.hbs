@@ -13,16 +13,42 @@
         font-size: 20px;
     }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.fa {
+  font-size: 50px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fa-heart{
+    color:#f44336;
+}
+
+.fa:hover {
+  color: #f44336;
+}
+
+</style>
 
 {{#if user}}
 {{#each blogs}}
-<div style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;" class="centered">
-    <h3>{{this.title}}</h3>
+<div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;" class="centered">
+    <h3 style="display: inline-block;">{{this.title}}</h3>
+    <i class="fa fa-heart float-right" onclick="myFunction(this)" id="heart" style="font-size:24px;"></i>
     <p class="content">{{this.content}}</p>
     <p style="display: inline-block;" class="date">{{this.date}}</p>
+    
     <p style="display: inline-block;" class="float-right">Irfan Rasheed</p>
 </div>
 {{/each}}
 {{else}}
 <h3 align="center">Publish And Read Blogs Here</h3>
 {{/if}}
+
+<script>
+function myFunction(x) {
+  x.classList.toggle("fa-heart-o");
+
+}
+</script>

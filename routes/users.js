@@ -16,7 +16,6 @@ router.get('/',async function(req, res, next) {
   if(req.session.userLoggedIn)
   {
     blogs =await userHelpers.getBlogs(req.session.user._id)
-    console.log(blogs)
   }
   let user = req.session.user;
   res.render('user/home.hbs', {user , blogs});
