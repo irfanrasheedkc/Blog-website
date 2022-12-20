@@ -65,6 +65,19 @@ module.exports = {
                     $unwind: "$blog"
                 },
                 {
+                    $lookup: {
+                        from: collection.USER_COLLECTION,
+                        localField: 'user',
+                        foreignField: '_id',
+                        as: 'username'
+                    }
+                },
+                {
+                    $addFields: {
+                        "blog.user": "$username.name"
+                    }
+                },
+                {
                     $group: {
                         _id: null,
                         newblog: { $push: "$blog" }
@@ -72,6 +85,7 @@ module.exports = {
                 }
             ]).toArray(async (err, documents) => {
                 blogDetails = documents[0].newblog
+                console.log(blogDetails);
                 resolve(blogDetails);
             })
         })
