@@ -54,7 +54,7 @@ module.exports = {
                     })
                 }
                 else {
-                    db.get().collection(collection.BLOG_COLLECTION).insertOne({user:objectId(userId) , blog:[res.insertedId]}).then((err, res) => {
+                    db.get().collection(collection.BLOG_COLLECTION).insertOne({ user: objectId(userId), blog: [res.insertedId] }).then((err, res) => {
                         resolve()
                     })
                 }
@@ -78,7 +78,8 @@ module.exports = {
                 },
                 {
                     $addFields: {
-                        "blog.user": "$username.name"
+                        "blog.user": "$username.name",
+                        "blog._id": { $toString: "$_id" }
                     }
                 },
                 {
@@ -87,11 +88,16 @@ module.exports = {
                         newblog: { $push: "$blog" }
                     }
                 }
-            ]).toArray(async (err, documents) => {
-                console.log(documents[0].newblog)
+            ], { multi: true }).toArray(async (err, documents) => {
                 blogDetails = documents[0].newblog
                 resolve(blogDetails);
             })
+        })
+    },
+    postLike: (blogId, userId) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId) }, { $push: { like: objectId(userId) } } )
+                resolve();
         })
     }
 }

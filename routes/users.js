@@ -18,6 +18,7 @@ router.get('/',async function(req, res, next) {
     blogs =await userHelpers.getBlogs(req.session.user._id)
   }
   let user = req.session.user;
+  console.log(blogs)
   res.render('user/home.hbs', {user , blogs});
 });
 
@@ -69,6 +70,14 @@ router.post('/create_blog' ,verifyLogin , function async(req , res){
   userHelpers.postBlog(req.body , req.session.user._id).then(()=>{
     res.redirect('/');
   })
+})
+
+router.post('/add-to-like' , verifyLogin , function async(req , res){
+  console.log(req.query.id)
+  userHelpers.postLike(req.query.id , req.session.user._id).then(()=>{
+    res.send("Success");
+  })
+  
 })
 
 module.exports = router;

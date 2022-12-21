@@ -35,7 +35,7 @@
 <div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;"
   class="centered">
   <h3 style="display: inline-block;">{{this.title}}</h3>
-  <i class="fa fa-heart float-right" onclick="myFunction(this)" id="heart{{@index}}" style="font-size:24px;"></i>
+  <i class="fa fa-heart float-right" onclick="myFunction(this)" id="{{this._id}}" style="font-size:24px;"></i>
   <p class="content">{{this.content}}</p>
   <p style="display: inline-block;" class="date">{{this.date}}</p>
 
@@ -56,5 +56,12 @@
   }
   function myFunction(x) {
     x.classList.toggle("fa-heart-o");
+    $.ajax({
+        url:'/add-to-like?id='+x.id,
+        method:'post',
+        success:(response)=>{
+          console.log("Success")
+        }
+    })
   }
 </script>
