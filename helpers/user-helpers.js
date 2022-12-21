@@ -42,28 +42,32 @@ module.exports = {
         blogData.date = new Date().toLocaleString(undefined, { timeZone: 'Asia/Kolkata' });
         data = {
             user: objectId(userId),
-            blog: [blogData]
+            blog: blogData,
+            like: []
         }
         return new Promise(async (resolve, reject) => {
-            let userBlog = await db.get().collection(collection.BLOG_COLLECTION).findOne({ user: objectId(userId) })
-            if (userBlog) {
-                db.get().collection(collection.BLOG_COLLECTION).updateOne({ user: objectId(userId) }, { $push: { blog: blogData } }).then((err, res) => {
-                    resolve();
-                })
-            }
-            else {
-                db.get().collection(collection.BLOG_COLLECTION).insertOne(data).then((err, res) => {
-                    resolve()
-                })
-            }
+            db.get().collection(collection.BLOGSTORE_COLLECTION).insertOne(data).then(async (res) => {
+                let userBlog = await db.get().collection(collection.BLOG_COLLECTION).findOne({ user: objectId(userId) })
+                if (userBlog) {
+                    db.get().collection(collection.BLOG_COLLECTION).updateOne({ user: objectId(userId) }, { $push: { blog: res.insertedId } }).then((err, res) => {
+                        resolve();
+                    })
+                }
+                else {
+                    db.get().collection(collection.BLOG_COLLECTION).insertOne({user:objectId(userId) , blog:[res.insertedId]}).then((err, res) => {
+                        resolve()
+                    })
+                }
+            })
+
         })
     },
     getBlogs: () => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.BLOG_COLLECTION).aggregate([
-                {
-                    $unwind: "$blog"
-                },
+            db.get().collection(collection.BLOGSTORE_COLLECTION).aggregate([
+                // {
+                //     $unwind: "$blog"
+                // },
                 {
                     $lookup: {
                         from: collection.USER_COLLECTION,
@@ -84,8 +88,8 @@ module.exports = {
                     }
                 }
             ]).toArray(async (err, documents) => {
+                console.log(documents[0].newblog)
                 blogDetails = documents[0].newblog
-                console.log(blogDetails);
                 resolve(blogDetails);
             })
         })

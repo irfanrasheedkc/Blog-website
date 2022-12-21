@@ -1,45 +1,45 @@
 <style>
-    .centered {
-        width: 90%;
-        margin: 0 auto;
-    }
+  .centered {
+    width: 90%;
+    margin: 0 auto;
+  }
 
-    .date {
-        font-family: 'Courier New';
-        font-size: 12px;
-    }
+  .date {
+    font-family: 'Courier New';
+    font-size: 12px;
+  }
 
-    .content {
-        font-size: 20px;
-    }
+  .content {
+    font-size: 20px;
+  }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-.fa {
-  font-size: 50px;
-  cursor: pointer;
-  user-select: none;
-}
+  .fa {
+    font-size: 50px;
+    cursor: pointer;
+    user-select: none;
+  }
 
-.fa-heart{
-    color:#f44336;
-}
+  .fa-heart {
+    color: #f44336;
+  }
 
-.fa:hover {
-  color: #f44336;
-}
-
+  .fa:hover {
+    color: #f44336;
+  }
 </style>
 
 {{#if user}}
 {{#each blogs}}
-<div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;" class="centered">
-    <h3 style="display: inline-block;">{{this.title}}</h3>
-    <i class="fa fa-heart float-right" onclick="myFunction(this)" id="heart" style="font-size:24px;"></i>
-    <p class="content">{{this.content}}</p>
-    <p style="display: inline-block;" class="date">{{this.date}}</p>
-    
-    <p style="display: inline-block;" class="float-right">{{this.user.[0]}}</p>
+<div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;"
+  class="centered">
+  <h3 style="display: inline-block;">{{this.title}}</h3>
+  <i class="fa fa-heart float-right" onclick="myFunction(this)" id="heart{{@index}}" style="font-size:24px;"></i>
+  <p class="content">{{this.content}}</p>
+  <p style="display: inline-block;" class="date">{{this.date}}</p>
+
+  <p style="display: inline-block;" class="float-right">{{this.user.[0]}}</p>
 </div>
 {{/each}}
 {{else}}
@@ -47,8 +47,14 @@
 {{/if}}
 
 <script>
-function myFunction(x) {
-  x.classList.toggle("fa-heart-o");
-
-}
+  window.onload = function () {
+    x = document.getElementsByClassName("fa");
+    console.log(x)
+    for (var j = 0; j < x.length; j++) {
+      x[j].classList.toggle("fa-heart-o");
+    }
+  }
+  function myFunction(x) {
+    x.classList.toggle("fa-heart-o");
+  }
 </script>
