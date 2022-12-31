@@ -62,12 +62,9 @@ module.exports = {
 
         })
     },
-    getBlogs: () => {
+    getBlogs: (userId) => {
         return new Promise(async (resolve, reject) => {
             db.get().collection(collection.BLOGSTORE_COLLECTION).aggregate([
-                // {
-                //     $unwind: "$blog"
-                // },
                 {
                     $lookup: {
                         from: collection.USER_COLLECTION,
@@ -83,21 +80,50 @@ module.exports = {
                     }
                 },
                 {
+                    $addFields: {
+                        "blog.like": {
+                            $cond: {
+                                if: { $in: [objectId(userId), "$like"] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    }
+                },
+                {
                     $group: {
                         _id: null,
                         newblog: { $push: "$blog" }
                     }
-                }
-            ], { multi: true }).toArray(async (err, documents) => {
+                },
+            ], { multi: true }).toArray((err, documents) => {
                 blogDetails = documents[0].newblog
                 resolve(blogDetails);
             })
         })
     },
     postLike: (blogId, userId) => {
+        console.log(blogId)
+        console.log(userId)
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId) }, { $push: { like: objectId(userId) } } )
-                resolve();
+            let likedUser = await db.get().collection(collection.BLOGSTORE_COLLECTION).findOne({
+                $and: [
+                   { _id: objectId(blogId) },
+                   { like: { $in: [objectId(userId)] } }
+                ]
+             });
+             console.log(likedUser)
+            if(likedUser)
+            {
+                db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId) }, { $pull: { like: objectId(userId) } });
+                console.log("Removed")
+            }
+            else
+            {
+                db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId), like: { $ne: objectId(userId) } }, { $push: { like: objectId(userId) } })
+                console.log("Liked...")       
+            }
+            resolve();
         })
     }
 }

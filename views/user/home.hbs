@@ -35,7 +35,11 @@
 <div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;"
   class="centered">
   <h3 style="display: inline-block;">{{this.title}}</h3>
+  {{#if this.like}}
   <i class="fa fa-heart float-right" onclick="myFunction(this)" id="{{this._id}}" style="font-size:24px;"></i>
+  {{else}}
+  <i class="fa fa-heart-o float-right" onclick="myFunction(this)" id="{{this._id}}" style="font-size:24px;"></i>
+  {{/if}}
   <p class="content">{{this.content}}</p>
   <p style="display: inline-block;" class="date">{{this.date}}</p>
 
@@ -47,15 +51,9 @@
 {{/if}}
 
 <script>
-  window.onload = function () {
-    x = document.getElementsByClassName("fa");
-    console.log(x)
-    for (var j = 0; j < x.length; j++) {
-      x[j].classList.toggle("fa-heart-o");
-    }
-  }
   function myFunction(x) {
     x.classList.toggle("fa-heart-o");
+    x.classList.toggle("fa-heart")
     $.ajax({
         url:'/add-to-like?id='+x.id,
         method:'post',

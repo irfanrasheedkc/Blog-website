@@ -73,7 +73,6 @@ router.post('/create_blog' ,verifyLogin , function async(req , res){
 })
 
 router.post('/add-to-like' , verifyLogin , function async(req , res){
-  console.log(req.query.id)
   userHelpers.postLike(req.query.id , req.session.user._id).then(()=>{
     res.send("Success");
   })
