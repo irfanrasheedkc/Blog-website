@@ -73,8 +73,12 @@ router.post('/create_blog' ,verifyLogin , function async(req , res){
 })
 
 router.post('/add-to-like' , verifyLogin , function async(req , res){
-  userHelpers.postLike(req.query.id , req.session.user._id).then(()=>{
-    res.send("Success");
+  userHelpers.postLike(req.query.id , req.session.user._id).then((x)=>{
+    response={
+      status:"Success",
+      count:x
+    }
+    res.send(response);
   })
   
 })

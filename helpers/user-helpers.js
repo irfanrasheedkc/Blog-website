@@ -80,6 +80,9 @@ module.exports = {
                     }
                 },
                 {
+                    $addFields: { "blog.like_count": { $size: "$like" } }
+                },
+                {
                     $addFields: {
                         "blog.like": {
                             $cond: {
@@ -108,22 +111,21 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let likedUser = await db.get().collection(collection.BLOGSTORE_COLLECTION).findOne({
                 $and: [
-                   { _id: objectId(blogId) },
-                   { like: { $in: [objectId(userId)] } }
+                    { _id: objectId(blogId) },
+                    { like: { $in: [objectId(userId)] } }
                 ]
-             });
-             console.log(likedUser)
-            if(likedUser)
-            {
+            });
+            console.log(likedUser)
+            if (likedUser) {
                 db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId) }, { $pull: { like: objectId(userId) } });
                 console.log("Removed")
+                resolve(-1);
             }
-            else
-            {
+            else {
                 db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId), like: { $ne: objectId(userId) } }, { $push: { like: objectId(userId) } })
-                console.log("Liked...")       
+                console.log("Liked...")
+                resolve(1);
             }
-            resolve();
         })
     }
 }
