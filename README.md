@@ -45,22 +45,35 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Install
 
-    $ git clone https://github.com/YOUR_USERNAME/PROJECT_TITLE
-    $ cd PROJECT_TITLE
-    $ yarn install
+    $ git clone https://github.com/irfanrasheedkc/Blog-website.git
+    
+    $ cd Blog-website
+    
+    $ yarn install 
+         or 
+    $ npm install
+
+## Add .env file
+    
+    Create a .env file in the current working directory.
+    Open it with a text editor or in the vs code. 
+    Add the following content:
+      
+      PORT = <PORT_NUMBER Eg:3000>
+      dbname = <DATABASE_NAME>
+      MONGO_USERNAME = <Mongo_Username>
+      MONGO_PASSWORD = <Mongo_Password>
+    
+###### Note:
+[MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) to get create an account on Mongodb cloud.
 
 ## Configure app
 
-Open `a/nice/path/to/a.file` then edit it with your settings. You will need:
-
-- A setting;
-- Another setting;
-- One more setting;
-
+    $ code .
+    This command opens the current folder in vs code.
+  
 ## Running the project
 
     $ yarn start
-
-## Simple build for production
-
-    $ yarn build
+        or 
+    $ npm start
