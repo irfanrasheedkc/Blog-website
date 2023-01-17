@@ -127,5 +127,12 @@ module.exports = {
                 resolve(1);
             }
         })
+    },
+    myBlogs: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.BLOGSTORE_COLLECTION).find({ "user": objectId(userId) }).toArray(function(err , docs){
+                resolve(docs)
+            })
+        })
     }
 }
