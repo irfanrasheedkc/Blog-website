@@ -54,23 +54,24 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
     $ npm install
 
 ## Add .env file
-    
-    Create a .env file in the current working directory.
-    Open it with a text editor or in the vs code. 
-    Add the following content:
-      
-      PORT = <PORT_NUMBER Eg:3000>
-      dbname = <DATABASE_NAME>
-      MONGO_USERNAME = <Mongo_Username>
-      MONGO_PASSWORD = <Mongo_Password>
-    
+
+Create a .env file in the current working directory.\
+Open it with a text editor or in the vs code. \
+Add the following content:
+```
+PORT = <PORT_NUMBER Eg:3000>
+dbname = <DATABASE_NAME>
+MONGO_USERNAME = <Mongo_Username>
+MONGO_PASSWORD = <Mongo_Password>
+```
 ###### Note:
 [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) to get create an account on Mongodb cloud.
 
 ## Configure app
-
-    $ code .
-    This command opens the current folder in vs code.
+```
+$ code .
+```
+This command opens the current folder in vs code.
   
 ## Running the project
 
