@@ -143,5 +143,11 @@ module.exports = {
             await db.get().collection(collection.BLOGSTORE_COLLECTION).deleteOne({ "_id": objectId(blogId) });
             resolve();
         })
+    },
+    editBlog: (blogId , content) =>{
+        return new Promise(async (resolve , reject)=>{
+            await db.get().collection(collection.BLOGSTORE_COLLECTION).updateOne({ _id: objectId(blogId) }, { $set: { "blog.content": content } });
+            resolve();
+        })
     }
 }

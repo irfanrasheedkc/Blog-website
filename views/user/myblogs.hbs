@@ -35,11 +35,16 @@
 <div onload="loadFunction()" style="background:white;margin-bottom:2em;padding-right:1em;padding-bottom:0;"
   class="centered">
   <h3 style="display: inline-block;">{{this.blog.title}}</h3>
-  <a type="button" href="/edit-blog?id={{this._id}}" class="btn btn-primary float-right">Edit</a>
-  <a type="button" href="/delete-blog?id={{this._id}}" id={{this._id}}
-    class="delete-btn btn btn-danger float-right">Delete</a>
-  <p class="content">{{this.blog.content}}</p>
+  <button type="button" href="/delete-blog?id={{this._id}}" id={{this._id}}
+    class="delete-btn btn btn-danger float-right">Delete</button>
+
+  <button id="edit{{this._id}}" type="button" style="height:35px;"
+    class="edit-btn btn-primary float-right">Edit</button>
+  <p id="content{{this._id}}" class="content">{{this.blog.content}}</p>
   <p style="display: inline-block;" class="date">{{this.blog.date}}</p>
+  <button id="save{{this._id}}" style="display:none;float:right">Save</button>
+  <button id="clear{{this._id}}" style="display:none;float:right">Clear</button>
+
 </div>
 {{/each}}
 {{else}}
@@ -47,21 +52,63 @@
 {{/if}}
 
 <script>
-  function myFunction(x) {
-    x.classList.toggle("fa-heart-o");
-    x.classList.toggle("fa-heart")
-    $.ajax({
-      url: '/add-to-like?id=' + x.id,
-      method: 'post',
-      success: (response) => {
-        let myElement = document.getElementById(x.id);
-        let currentValue = parseInt(myElement.innerHTML);
-        console.log(currentValue);
-        myElement.innerHTML = currentValue + response.count;
-        console.log(response)
-      }
-    })
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    var editButtons = document.querySelectorAll("[id^='edit']");
+    var saveButtons = document.querySelectorAll("[id^='save']");
+    var clearButtons = document.querySelectorAll("[id^='clear']");
+    var originalContent = {};
+
+    editButtons.forEach(function (button, index) {
+      var contentId = button.id.replace("edit", "content");
+      var saveButtonId = button.id.replace("edit", "save");
+      var clearButtonId = button.id.replace("edit", "clear");
+
+
+      button.addEventListener("click", function () {
+        document.getElementById(saveButtonId).style.display = "block";
+        document.getElementById(clearButtonId).style.display = "block";
+        originalContent[contentId] = document.getElementById(contentId).innerHTML;
+        document.getElementById(contentId).contentEditable = true;
+      });
+    });
+
+    saveButtons.forEach(function (button, index) {
+      var contentId = button.id.replace("save", "content");
+      var clearButtonId = button.id.replace("save", "clear");
+
+      document.getElementById(contentId).addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.execCommand('insertHTML', false, ' ');
+        }
+      });
+
+      button.addEventListener("click", function () {
+
+        content = document.getElementById(contentId).innerHTML
+
+        $.ajax({
+          url: '/edit-content?id=' + contentId.slice(7) + '&content=' + content,
+          method: 'post',
+          success: (response) => {
+            console.log(response)
+          }
+        })
+        document.getElementById(clearButtonId).style.display = "none";
+        button.style.display = "none";
+        document.getElementById(contentId).contentEditable = false;
+      });
+    });
+
+    clearButtons.forEach(function (button, index) {
+      var contentId = button.id.replace("clear", "content");
+
+      button.addEventListener("click", function () {
+
+        document.getElementById(contentId).innerHTML = originalContent[contentId];
+      });
+    });
+  });
 
   const deleteBtns = document.querySelectorAll(".delete-btn");
   deleteBtns.forEach(function (btn) {

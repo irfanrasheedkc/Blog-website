@@ -100,5 +100,10 @@ router.get('/delete-blog', verifyLogin, (req, res) => {
   })
 });
 
+router.post('/edit-content', (req, res) => {
+  console.log(req.query.content)
+  userHelpers.editBlog(req.query.id , req.query.content)
+});
+
 
 module.exports = router;
