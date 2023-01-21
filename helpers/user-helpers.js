@@ -130,9 +130,18 @@ module.exports = {
     },
     myBlogs: (userId) => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.BLOGSTORE_COLLECTION).find({ "user": objectId(userId) }).toArray(function(err , docs){
+            db.get().collection(collection.BLOGSTORE_COLLECTION).find({ "user": objectId(userId) }).toArray(function (err, docs) {
                 resolve(docs)
             })
+        })
+    },
+    deleteBlog: (blogId , userId) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(userId)
+            console.log(blogId)
+            await db.get().collection(collection.BLOG_COLLECTION).updateOne({ "user": objectId(userId) }, { $pull: { "blog": objectId(blogId) }});
+            await db.get().collection(collection.BLOGSTORE_COLLECTION).deleteOne({ "_id": objectId(blogId) });
+            resolve();
         })
     }
 }

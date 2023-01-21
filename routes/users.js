@@ -1,4 +1,5 @@
 var express = require('express');
+const { redirect } = require('express/lib/response.js');
 var router = express.Router();
 const res = require('express/lib/response.js');
 const userHelpers = require('../helpers/user-helpers.js');
@@ -86,5 +87,18 @@ router.get('/my-blogs', verifyLogin, async (req, res) => {
   console.log(blogs)
   res.render('user/myblogs.hbs', { user, blogs });
 });
+
+router.get('/edit-blog', verifyLogin, (req, res) => {
+  console.log("Edit");
+  
+});
+
+router.get('/delete-blog', verifyLogin, (req, res) => {
+  console.log("Delete");
+  userHelpers.deleteBlog(req.query.id, req.session.user._id).then((response) => {
+    res.redirect('/my-blogs');
+  })
+});
+
 
 module.exports = router;
